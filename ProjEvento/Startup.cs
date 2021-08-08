@@ -29,6 +29,7 @@ namespace ProjEvento
         {
             services.AddDbContext<DataContext>(context => context.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjEvento", Version = "v1" });
@@ -48,6 +49,10 @@ namespace ProjEvento
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(cors => cors.AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {
