@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ProjEvento.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProjEvento.Application;
+using ProjEvento.Application.Services;
+using ProjEvento.Persistence;
+using ProjEvento.Persistence.Contexto;
+using ProjEvento.Persistence.Interfaces;
 
 namespace ProjEvento
 {
@@ -27,8 +25,14 @@ namespace ProjEvento
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(context => context.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddDbContext<ProjEventoContext>(context => context.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddControllers()
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<IEventoService, EventoService>();
+            services.AddScoped<IGeralPersistence, ProjGeralPersistence>();
+            services.AddScoped<IEventoPersistence, ProjEventosPersistence>();
+
             services.AddCors();
             services.AddSwaggerGen(c =>
             {
