@@ -42,10 +42,14 @@ namespace ProjEvento.Controllers
         {
             try
             {
+            {
                 var evento = await _eventoService.GetAllEventoByIdAsync(id, true);
                 if (evento == null) return NotFound("Nenhum Evento Encontrado com esse ID");
                 return Ok(evento);
             }
+
+            }
+          
             catch (Exception ex)
             {
 

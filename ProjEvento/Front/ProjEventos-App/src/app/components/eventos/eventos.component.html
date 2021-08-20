@@ -1,5 +1,6 @@
-<h1>Eventos Ok</h1>
-<hr>
+<app-titulo [titulo]="'Evento'"></app-titulo>
+
+
 
 <div class="form-inline">
     <div class="form-group mb-2">
@@ -16,7 +17,8 @@
         <tr>
             <th><button class="btn btn-outline-light btn-sm"
                 (click)="mostrarImagem()">
-                {{exibirImagem ? "Mostrar" : "Ocultar"}}    
+                <i class="{{exibirImagem ? 'fa fa-eye' : 'fa fa-eye-slash'}}"></i> <!--icone de olhinho-->
+               {{exibirImagem ? "Mostrar" : "Ocultar"}}
             </button></th>
             <th>#</th>
             <th>Tema</th>
@@ -41,12 +43,17 @@
                <td>{{evento.id}}</td>
                <td>{{evento.tema}}</td>
                <td>{{evento.local}}</td>
-               <td>{{evento.data}}</td>
+               <td>{{evento.data | DateFormatPipe}}</td>
                <td>{{evento.qtdPessoas}}</td>
-               <td>{{evento.lote}}</td>
+               <td>{{evento.lotes[0].nome}}</td>
                <td>
-                <button type="button" class="btn btn-primary btn-sm mr-2">Editar</button>
-                <button type="button" class="btn btn-danger btn-sm">Excluir</button>
+                <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
+                <i class="{{'fa fa-edit'}}"  ></i>
+                Editar
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+                    <i class="{{'fa fa-trash'}}"></i>
+                    Excluir</button>
                </td>
            </tr>
        </tbody>
@@ -60,3 +67,12 @@
         <hr>
 
 </table>
+
+
+<ng-template #template>
+    <div class="modal-body text-center">
+      <p>Você esta prestes a deletar este evento</p>
+      <button type="button" class="btn btn-danger mr-2" (click)="confirm()">Sim</button>
+      <button type="button" class="btn btn-primary" (click)="decline()" >Nao</button>
+    </div>
+  </ng-template>
